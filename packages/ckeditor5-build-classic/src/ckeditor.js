@@ -27,7 +27,6 @@ import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
 import Indent from '@ckeditor/ckeditor5-indent/src/indent';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import List from '@ckeditor/ckeditor5-list/src/list';
-import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
@@ -37,6 +36,7 @@ import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
 import Mathematics from '@ckeditor5-lumi/ckeditor5-math/src/math';
+import Video from '@ckeditor5-lumi/ckeditor5-video/src/video';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -65,7 +65,6 @@ ClassicEditor.builtinPlugins = [
   Link,
   List,
   Mathematics,
-  MediaEmbed,
   RemoveFormat,
   Paragraph,
   PasteFromOffice,
@@ -74,6 +73,7 @@ ClassicEditor.builtinPlugins = [
   Table,
   TableToolbar,
   TextTransformation,
+  Video,
 ];
 
 // Editor configuration.
@@ -100,7 +100,7 @@ ClassicEditor.defaultConfig = {
       'blockquote',
       '|',
       'imageUpload',
-      'mediaEmbed',
+      'insertVideo',
       'insertTable',
       'specialCharacters',
       'math',
