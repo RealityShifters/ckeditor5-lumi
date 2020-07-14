@@ -1,33 +1,33 @@
-@import "@ckeditor/ckeditor5-ui/theme/mixins/_rwd.css";
+@import '@ckeditor/ckeditor5-ui/theme/mixins/_rwd.css';
 
 .ck.ck-math-form {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  & .ck-math-view {
+    padding: 10px;
     display: flex;
-    align-items: flex-start;
-    flex-direction: row;
-	flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    flex-basis: 100%;
 
-	& .ck-math-view {
-		padding: 10px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		flex-basis: 100%;
+    & .ck-labeled-input {
+      flex-basis: 100%;
+    }
 
-		& .ck-labeled-input {
-			flex-basis: 100%;
-		}
+    & .ck-label {
+      flex-basis: 100%;
+    }
+  }
 
-		& .ck-label {
-			flex-basis: 100%;
-		}
-	}
-
-	& .ck-button {
-		flex-basis: 50%;
-	}
+  & .ck-button {
+    flex-basis: 50%;
+  }
 }
 
 // Increase toolbar default z-index by one because math preview should be below of it
 .ck.ck-toolbar-container {
-	z-index: calc(var(--ck-z-modal) + 2);
+  z-index: calc(var(--ck-z-modal) + 2);
 }

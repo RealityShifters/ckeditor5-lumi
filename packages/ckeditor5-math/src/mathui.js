@@ -16,224 +16,239 @@ import mathIcon from '../theme/icons/math.svg';
 const mathKeystroke = 'Ctrl+M';
 
 export default class MathUI extends Plugin {
-	static get requires() {
-		return [ ContextualBalloon, MathEditing ];
-	}
+  static get requires() {
+    return [ContextualBalloon, MathEditing];
+  }
 
-	static get pluginName() {
-		return 'MathUI';
-	}
+  static get pluginName() {
+    return 'MathUI';
+  }
 
-	init() {
-		const editor = this.editor;
-		editor.editing.view.addObserver( ClickObserver );
+  init() {
+    const editor = this.editor;
+    editor.editing.view.addObserver(ClickObserver);
 
-		this._previewUid = `math-preview-${ uid() }`;
+    this._previewUid = `math-preview-${uid()}`;
 
-		this.formView = this._createFormView();
+    this.formView = this._createFormView();
 
-		this._balloon = editor.plugins.get( ContextualBalloon );
+    this._balloon = editor.plugins.get(ContextualBalloon);
 
-		this._createToolbarMathButton();
+    this._createToolbarMathButton();
 
-		this._enableUserBalloonInteractions();
-	}
+    this._enableUserBalloonInteractions();
+  }
 
-	destroy() {
-		super.destroy();
+  destroy() {
+    super.destroy();
 
-		this.formView.destroy();
+    this.formView.destroy();
 
-		// Destroy preview element
-		const prewviewEl = global.document.getElementById( this._previewUid );
-		if ( prewviewEl ) {
-			prewviewEl.parentNode.removeChild( prewviewEl );
-		}
-	}
+    // Destroy preview element
+    const prewviewEl = global.document.getElementById(this._previewUid);
+    if (prewviewEl) {
+      prewviewEl.parentNode.removeChild(prewviewEl);
+    }
+  }
 
-	_showUI() {
-		const editor = this.editor;
-		const mathCommand = editor.commands.get( 'math' );
+  _showUI() {
+    const editor = this.editor;
+    const mathCommand = editor.commands.get('math');
 
-		if ( !mathCommand.isEnabled ) {
-			return;
-		}
+    if (!mathCommand.isEnabled) {
+      return;
+    }
 
-		this._addFormView();
+    this._addFormView();
 
-		this._balloon.showStack( 'main' );
-	}
+    this._balloon.showStack('main');
+  }
 
-	_createFormView() {
-		const editor = this.editor;
-		const mathCommand = editor.commands.get( 'math' );
+  _createFormView() {
+    const editor = this.editor;
+    const mathCommand = editor.commands.get('math');
 
-		const mathConfig = this.editor.config.get( 'math' );
+    const mathConfig = this.editor.config.get('math');
 
-		const formView = new MainFormView( editor.locale, mathConfig.engine, mathConfig.enablePreview, this._previewUid );
+    const formView = new MainFormView(
+      editor.locale,
+      mathConfig.engine,
+      mathConfig.enablePreview,
+      this._previewUid
+    );
 
-		formView.mathInputView.bind( 'value' ).to( mathCommand, 'value' );
-		formView.displayButtonView.bind( 'isOn' ).to( mathCommand, 'display' );
+    formView.mathInputView.bind('value').to(mathCommand, 'value');
+    formView.displayButtonView.bind('isOn').to(mathCommand, 'display');
 
-		// Form elements should be read-only when corresponding commands are disabled.
-		formView.mathInputView.bind( 'isReadOnly' ).to( mathCommand, 'isEnabled', value => !value );
-		formView.saveButtonView.bind( 'isEnabled' ).to( mathCommand );
-		formView.displayButtonView.bind( 'isEnabled' ).to( mathCommand );
+    // Form elements should be read-only when corresponding commands are disabled.
+    formView.mathInputView
+      .bind('isReadOnly')
+      .to(mathCommand, 'isEnabled', (value) => !value);
+    formView.saveButtonView.bind('isEnabled').to(mathCommand);
+    formView.displayButtonView.bind('isEnabled').to(mathCommand);
 
-		// Listen to submit button click
-		this.listenTo( formView, 'submit', () => {
-			editor.execute( 'math', formView.equation, formView.displayButtonView.isOn, mathConfig.outputType, mathConfig.forceOutputType );
-			this._closeFormView();
-		} );
+    // Listen to submit button click
+    this.listenTo(formView, 'submit', () => {
+      editor.execute(
+        'math',
+        formView.equation,
+        formView.displayButtonView.isOn,
+        mathConfig.outputType,
+        mathConfig.forceOutputType
+      );
+      this._closeFormView();
+    });
 
-		// Listen to cancel button click
-		this.listenTo( formView, 'cancel', () => {
-			this._closeFormView();
-		} );
+    // Listen to cancel button click
+    this.listenTo(formView, 'cancel', () => {
+      this._closeFormView();
+    });
 
-		// Close plugin ui, if esc is pressed (while ui is focused)
-		formView.keystrokes.set( 'esc', ( data, cancel ) => {
-			this._closeFormView();
-			cancel();
-		} );
+    // Close plugin ui, if esc is pressed (while ui is focused)
+    formView.keystrokes.set('esc', (data, cancel) => {
+      this._closeFormView();
+      cancel();
+    });
 
-		return formView;
-	}
+    return formView;
+  }
 
-	_addFormView() {
-		if ( this._isFormInPanel ) {
-			return;
-		}
+  _addFormView() {
+    if (this._isFormInPanel) {
+      return;
+    }
 
-		const editor = this.editor;
-		const mathCommand = editor.commands.get( 'math' );
+    const editor = this.editor;
+    const mathCommand = editor.commands.get('math');
 
-		this._balloon.add( {
-			view: this.formView,
-			position: this._getBalloonPositionData()
-		} );
+    this._balloon.add({
+      view: this.formView,
+      position: this._getBalloonPositionData(),
+    });
 
-		if ( this._balloon.visibleView === this.formView ) {
-			this.formView.mathInputView.select();
-		}
+    if (this._balloon.visibleView === this.formView) {
+      this.formView.mathInputView.select();
+    }
 
-		// Show preview element
-		const prewviewEl = global.document.getElementById( this._previewUid );
-		if ( prewviewEl && this.formView.previewEnabled ) {
-			// Force refresh preview
-			this.formView.mathView.updateMath();
-		}
+    // Show preview element
+    const prewviewEl = global.document.getElementById(this._previewUid);
+    if (prewviewEl && this.formView.previewEnabled) {
+      // Force refresh preview
+      this.formView.mathView.updateMath();
+    }
 
-		this.formView.equation = mathCommand.value || '';
-		this.formView.displayButtonView.isOn = mathCommand.display || false;
-	}
+    this.formView.equation = mathCommand.value || '';
+    this.formView.displayButtonView.isOn = mathCommand.display || false;
+  }
 
-	_hideUI() {
-		if ( !this._isFormInPanel ) {
-			return;
-		}
+  _hideUI() {
+    if (!this._isFormInPanel) {
+      return;
+    }
 
-		const editor = this.editor;
+    const editor = this.editor;
 
-		this.stopListening( editor.ui, 'update' );
-		this.stopListening( this._balloon, 'change:visibleView' );
+    this.stopListening(editor.ui, 'update');
+    this.stopListening(this._balloon, 'change:visibleView');
 
-		editor.editing.view.focus();
+    editor.editing.view.focus();
 
-		// Remove form first because it's on top of the stack.
-		this._removeFormView();
-	}
+    // Remove form first because it's on top of the stack.
+    this._removeFormView();
+  }
 
-	_closeFormView() {
-		const mathCommand = this.editor.commands.get( 'math' );
-		if ( mathCommand.value !== undefined ) {
-			this._removeFormView();
-		} else {
-			this._hideUI();
-		}
-	}
+  _closeFormView() {
+    const mathCommand = this.editor.commands.get('math');
+    if (mathCommand.value !== undefined) {
+      this._removeFormView();
+    } else {
+      this._hideUI();
+    }
+  }
 
-	_removeFormView() {
-		if ( this._isFormInPanel ) {
-			this.formView.saveButtonView.focus();
+  _removeFormView() {
+    if (this._isFormInPanel) {
+      this.formView.saveButtonView.focus();
 
-			this._balloon.remove( this.formView );
+      this._balloon.remove(this.formView);
 
-			// Hide preview element
-			const prewviewEl = global.document.getElementById( this._previewUid );
-			if ( prewviewEl ) {
-				prewviewEl.style.visibility = 'hidden';
-			}
+      // Hide preview element
+      const prewviewEl = global.document.getElementById(this._previewUid);
+      if (prewviewEl) {
+        prewviewEl.style.visibility = 'hidden';
+      }
 
-			this.editor.editing.view.focus();
-		}
-	}
+      this.editor.editing.view.focus();
+    }
+  }
 
-	_getBalloonPositionData() {
-		const view = this.editor.editing.view;
-		const viewDocument = view.document;
-		const target = view.domConverter.viewRangeToDom( viewDocument.selection.getFirstRange() );
-		return { target };
-	}
+  _getBalloonPositionData() {
+    const view = this.editor.editing.view;
+    const viewDocument = view.document;
+    const target = view.domConverter.viewRangeToDom(
+      viewDocument.selection.getFirstRange()
+    );
+    return { target };
+  }
 
-	_createToolbarMathButton() {
-		const editor = this.editor;
-		const mathCommand = editor.commands.get( 'math' );
-		const t = editor.t;
+  _createToolbarMathButton() {
+    const editor = this.editor;
+    const mathCommand = editor.commands.get('math');
+    const t = editor.t;
 
-		// Handle the `Ctrl+M` keystroke and show the panel.
-		editor.keystrokes.set( mathKeystroke, ( keyEvtData, cancel ) => {
-			// Prevent focusing the search bar in FF and opening new tab in Edge. #153, #154.
-			cancel();
+    // Handle the `Ctrl+M` keystroke and show the panel.
+    editor.keystrokes.set(mathKeystroke, (keyEvtData, cancel) => {
+      // Prevent focusing the search bar in FF and opening new tab in Edge. #153, #154.
+      cancel();
 
-			if ( mathCommand.isEnabled ) {
-				this._showUI();
-			}
-		} );
+      if (mathCommand.isEnabled) {
+        this._showUI();
+      }
+    });
 
-		this.editor.ui.componentFactory.add( 'math', locale => {
-			const button = new ButtonView( locale );
+    this.editor.ui.componentFactory.add('math', (locale) => {
+      const button = new ButtonView(locale);
 
-			button.isEnabled = true;
-			button.label = t( 'Insert math' );
-			button.icon = mathIcon;
-			button.keystroke = mathKeystroke;
-			button.tooltip = true;
-			button.isToggleable = true;
+      button.isEnabled = true;
+      button.label = t('Insert math');
+      button.icon = mathIcon;
+      button.keystroke = mathKeystroke;
+      button.tooltip = true;
+      button.isToggleable = true;
 
-			button.bind( 'isEnabled' ).to( mathCommand, 'isEnabled' );
+      button.bind('isEnabled').to(mathCommand, 'isEnabled');
 
-			this.listenTo( button, 'execute', () => this._showUI() );
+      this.listenTo(button, 'execute', () => this._showUI());
 
-			return button;
-		} );
-	}
+      return button;
+    });
+  }
 
-	_enableUserBalloonInteractions() {
-		// Close the panel on the Esc key press when the editable has focus and the balloon is visible.
-		this.editor.keystrokes.set( 'Esc', ( data, cancel ) => {
-			if ( this._isUIVisible ) {
-				this._hideUI();
-				cancel();
-			}
-		} );
+  _enableUserBalloonInteractions() {
+    // Close the panel on the Esc key press when the editable has focus and the balloon is visible.
+    this.editor.keystrokes.set('Esc', (data, cancel) => {
+      if (this._isUIVisible) {
+        this._hideUI();
+        cancel();
+      }
+    });
 
-		// Close on click outside of balloon panel element.
-		clickOutsideHandler( {
-			emitter: this.formView,
-			activator: () => this._isFormInPanel,
-			contextElements: [ this._balloon.view.element ],
-			callback: () => this._hideUI()
-		} );
-	}
+    // Close on click outside of balloon panel element.
+    clickOutsideHandler({
+      emitter: this.formView,
+      activator: () => this._isFormInPanel,
+      contextElements: [this._balloon.view.element],
+      callback: () => this._hideUI(),
+    });
+  }
 
-	get _isUIVisible() {
-		const visibleView = this._balloon.visibleView;
+  get _isUIVisible() {
+    const visibleView = this._balloon.visibleView;
 
-		return visibleView == this.formView;
-	}
+    return visibleView == this.formView;
+  }
 
-	get _isFormInPanel() {
-		return this._balloon.hasView( this.formView );
-	}
+  get _isFormInPanel() {
+    return this._balloon.hasView(this.formView);
+  }
 }

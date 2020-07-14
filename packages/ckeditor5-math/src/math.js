@@ -6,11 +6,11 @@ import MathEditing from './mathediting';
 import AutoMath from './automath';
 
 export default class Math extends Plugin {
-	static get requires() {
-		return [ MathEditing, MathUI, Widget, AutoMath ];
-	}
+  static get requires() {
+    return [MathEditing, MathUI, Widget, AutoMath];
+  }
 
-	static get pluginName() {
-		return 'Math';
-	}
+  static get pluginName() {
+    return 'Math';
+  }
 }

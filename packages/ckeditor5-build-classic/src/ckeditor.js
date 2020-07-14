@@ -42,100 +42,96 @@ export default class ClassicEditor extends ClassicEditorBase {}
 
 // Plugins to include in the build.
 ClassicEditor.builtinPlugins = [
-	Essentials,
-	UploadAdapter,
-	Autoformat,
-	BlockQuote,
-	Bold,
-	Italic,
-	Underline,
-	Strikethrough,
-	Subscript,
-	Superscript,
-	CKFinder,
-	EasyImage,
-	Font,
-	Heading,
-	Image,
-	ImageCaption,
-	ImageStyle,
-	ImageToolbar,
-	ImageUpload,
-	Indent,
-	Link,
-	List,
-	Mathematics,
-	MediaEmbed,
-	RemoveFormat,
-	Paragraph,
-	PasteFromOffice,
-	SpecialCharacters,
-	SpecialCharactersEssentials,
-	Table,
-	TableToolbar,
-	TextTransformation
+  Essentials,
+  UploadAdapter,
+  Autoformat,
+  BlockQuote,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Subscript,
+  Superscript,
+  CKFinder,
+  EasyImage,
+  Font,
+  Heading,
+  Image,
+  ImageCaption,
+  ImageStyle,
+  ImageToolbar,
+  ImageUpload,
+  Indent,
+  Link,
+  List,
+  Mathematics,
+  MediaEmbed,
+  RemoveFormat,
+  Paragraph,
+  PasteFromOffice,
+  SpecialCharacters,
+  SpecialCharactersEssentials,
+  Table,
+  TableToolbar,
+  TextTransformation,
 ];
 
 // Editor configuration.
 ClassicEditor.defaultConfig = {
-	toolbar: {
-		shouldNotGroupWhenFull: true,
-		items: [
-			'fontFamily',
-			'fontSize',
-			'fontColor',
-			'fontBackgroundColor',
-			'|',
-			'bold',
-			'italic',
-			'underline',
-			'strikethrough',
-			'superscript',
-			'subscript',
-			'removeFormat',
-			'|',
-			'link',
-			'bulletedList',
-			'numberedList',
-			'blockquote',
-			'|',
-			'imageUpload',
-			'mediaEmbed',
-			'insertTable',
-			'specialCharacters',
-			'math',
-		]
-	},
-	link: {
-		decorators: {
-			openInNewTab: {
-				mode: 'manual',
-				label: 'Open in a new tab',
-				attributes: {
-						target: '_blank',
-						rel: 'noopener noreferrer'
-				}
-			}
-		}
-	},
-	image: {
-		toolbar: [
-			'imageStyle:full',
-			'imageStyle:side',
-			'|',
-			'imageTextAlternative'
-		]
-	},
-	table: {
-		contentToolbar: [
-			'tableColumn',
-			'tableRow',
-			'mergeTableCells'
-		]
-	},
-	math: {
-		engine: 'mathjax',
-	},
-	// This value must be kept in sync with the language defined in webpack.config.js.
-	language: 'en'
+  toolbar: {
+    shouldNotGroupWhenFull: true,
+    items: [
+      'fontFamily',
+      'fontSize',
+      'fontColor',
+      'fontBackgroundColor',
+      '|',
+      'bold',
+      'italic',
+      'underline',
+      'strikethrough',
+      'superscript',
+      'subscript',
+      'removeFormat',
+      '|',
+      'link',
+      'bulletedList',
+      'numberedList',
+      'blockquote',
+      '|',
+      'imageUpload',
+      'mediaEmbed',
+      'insertTable',
+      'specialCharacters',
+      'math',
+    ],
+  },
+  link: {
+    decorators: {
+      openInNewTab: {
+        mode: 'manual',
+        label: 'Open in a new tab',
+        attributes: {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        },
+      },
+    },
+  },
+  image: {
+    toolbar: [
+      'imageStyle:full',
+      'imageStyle:side',
+      '|',
+      'imageTextAlternative',
+    ],
+  },
+  table: {
+    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+  },
+  math: {
+    engine: 'mathjax',
+  },
+  // This value must be kept in sync with the language defined in webpack.config.js.
+  language: 'en',
 };
