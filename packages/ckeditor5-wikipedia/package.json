@@ -1,0 +1,23 @@
+{
+  "name": "@ckeditor5-lumi/ckeditor5-wikipedia",
+  "version": "20.0.0",
+  "keywords": [
+    "ckeditor",
+    "ckeditor5",
+    "ckeditor 5",
+    "ckeditor5-feature",
+    "ckeditor5-plugin"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=8.0.0",
+    "npm": ">=5.7.1"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-essentials": "^20.0.0",
+    "@ckeditor/ckeditor5-heading": "^20.0.0",
+    "@ckeditor/ckeditor5-list": "^20.0.0",
+    "@ckeditor/ckeditor5-paragraph": "^20.0.0",
+    "@ckeditor/ckeditor5-widget": "^20.0.0"
+  }
+}

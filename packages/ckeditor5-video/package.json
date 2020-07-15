@@ -22,8 +22,5 @@
     "@ckeditor/ckeditor5-undo": "^20.0.0",
     "@ckeditor/ckeditor5-utils": "^20.0.0",
     "@ckeditor/ckeditor5-widget": "^20.0.0"
-  },
-  "devDependencies": {
-    "prettier": "2.0.5"
   }
 }

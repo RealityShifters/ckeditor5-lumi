@@ -1,8 +1,3 @@
-/**
- * @license Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
- */
-
 // The editor creator to use.
 import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
@@ -37,6 +32,7 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
 import Mathematics from '@ckeditor5-lumi/ckeditor5-math/src/math';
 import Video from '@ckeditor5-lumi/ckeditor5-video/src/video';
+import Wikipedia from '@ckeditor5-lumi/ckeditor5-wikipedia/src/wikipedia';
 
 export default class ClassicEditor extends ClassicEditorBase {}
 
@@ -74,6 +70,7 @@ ClassicEditor.builtinPlugins = [
   TableToolbar,
   TextTransformation,
   Video,
+  Wikipedia,
 ];
 
 // Editor configuration.
@@ -104,6 +101,7 @@ ClassicEditor.defaultConfig = {
       'insertTable',
       'specialCharacters',
       'math',
+      'wikipedia',
     ],
   },
   link: {
